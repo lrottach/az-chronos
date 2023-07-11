@@ -1,7 +1,27 @@
 {
 	"image": "mcr.microsoft.com/devcontainers/universal:2",
 	"features": {
-		"ghcr.io/devcontainers/features/azure-cli:1": {},
-		"ghcr.io/devcontainers/features/powershell:1": {}
+		"ghcr.io/devcontainers/features/azure-cli:1": {
+			"version": "latest"
+		},
+		"ghcr.io/devcontainers/features/powershell:1": {
+			"version": "latest"
+		}
+	},
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"vscodevim.vim",
+				"ms-dotnettools.vscode-dotnet-runtime",
+				"ms-vscode.azure-account",
+				"ms-azuretools.vscode-azurefunctions",
+				"ms-azuretools.vscode-azureresourcegroups",
+				"ms-dotnettools.csharp",
+				"ms-dotnettools.csdevkit",
+				"GitHub.copilot",
+				"GitHub.copilot-chat",
+				"ms-dotnettools.vscodeintellicode-csharp"
+			]
+		}
 	}
 }
