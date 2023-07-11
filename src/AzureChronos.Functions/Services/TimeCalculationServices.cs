@@ -1,5 +1,6 @@
 using System;
 using Cronos;
+using NCrontab;
 
 namespace AzureChronos.Functions.Services;
 
@@ -12,10 +13,17 @@ public class TimeCalculationServices
     /// <returns>The next occurrence of the cron expression in UTC time zone, or null if the expression is invalid.</returns>
     public static DateTime? GetNextOccurrence(string cronExpression)
     {
-        var cron = CronExpression.Parse(cronExpression);
-        var nextOccurrence = cron.GetNextOccurrence(DateTime.UtcNow, TimeZoneInfo.Utc);
+        try
+        {
+            var expression = CrontabSchedule.Parse(cronExpression);
+            var nextOccurrence = expression.GetNextOccurrence(DateTime.UtcNow);
+            return nextOccurrence;
+        }
+        catch (Exception)
+        {
+            return null; 
+        }
         
-        return nextOccurrence;
     }
     
     /// <summary>
