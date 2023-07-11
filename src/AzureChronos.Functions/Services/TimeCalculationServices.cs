@@ -6,11 +6,11 @@ namespace AzureChronos.Functions.Services;
 public class TimeCalculationServices
 {
     /// <summary>
-    /// Function to get the next occurrence of a cron expression
+    /// Calculates the next occurrence of a cron expression in UTC time zone.
     /// </summary>
-    /// <param name="cronExpression"></param>
-    /// <returns></returns>
-    public DateTime? GetNextOccurrence(string cronExpression)
+    /// <param name="cronExpression">The cron expression to evaluate.</param>
+    /// <returns>The next occurrence of the cron expression in UTC time zone, or null if the expression is invalid.</returns>
+    public static DateTime? GetNextOccurrence(string cronExpression)
     {
         var cron = CronExpression.Parse(cronExpression);
         var nextOccurrence = cron.GetNextOccurrence(DateTime.UtcNow, TimeZoneInfo.Utc);
@@ -19,12 +19,12 @@ public class TimeCalculationServices
     }
     
     /// <summary>
-    /// Function to validate if a DateTime is within the specified number of minutes from now
+    /// Determines whether the specified date and time is within the next specified number of minutes from the current UTC date and time.
     /// </summary>
-    /// <param name="dateTime">DateTime to validate. Generated from a CRON expression for example</param>
-    /// <param name="validationMinutes"></param>
-    /// <returns></returns>
-    public bool IsWithinNext30Minutes(DateTime? dateTime, int validationMinutes)
+    /// <param name="dateTime">The date and time to compare.</param>
+    /// <param name="validationMinutes">The number of minutes to validate.</param>
+    /// <returns>true if the specified date and time is within the next specified number of minutes from the current UTC date and time; otherwise, false.</returns>
+    public static bool IsWithinNext30Minutes(DateTime? dateTime, int validationMinutes)
     {
         if (dateTime == null)
         {
