@@ -16,7 +16,7 @@ public class TimeCalculationServicesTests
         var expectedNextOccurrence = DateTime.UtcNow.Date.AddDays(1);
 
         // Act
-        var nextOccurrence = TimeCalculationServices.GetNextOccurrence(cronExpression);
+        var nextOccurrence = TimeCalculationService.GetNextOccurrence(cronExpression);
 
         // Assert
         Assert.AreEqual(expectedNextOccurrence, nextOccurrence?.Date);
@@ -29,7 +29,7 @@ public class TimeCalculationServicesTests
         var cronExpression = "invalid expression";
 
         // Act
-        var nextOccurrence = TimeCalculationServices.GetNextOccurrence(cronExpression);
+        var nextOccurrence = TimeCalculationService.GetNextOccurrence(cronExpression);
 
         // Assert
         Assert.IsNull(nextOccurrence);
@@ -43,7 +43,7 @@ public class TimeCalculationServicesTests
         var validationMinutes = 30;
 
         // Act
-        var result = TimeCalculationServices.IsWithinNext30Minutes(dateTime, validationMinutes);
+        var result = TimeCalculationService.IsDateTimeInRange(dateTime, validationMinutes);
 
         // Assert
         Assert.IsTrue(result);
@@ -57,7 +57,7 @@ public class TimeCalculationServicesTests
         var validationMinutes = 30;
 
         // Act
-        var result = TimeCalculationServices.IsWithinNext30Minutes(dateTime, validationMinutes);
+        var result = TimeCalculationService.IsDateTimeInRange(dateTime, validationMinutes);
 
         // Assert
         Assert.IsFalse(result);
@@ -71,7 +71,7 @@ public class TimeCalculationServicesTests
         var validationMinutes = 30;
 
         // Act
-        var result = TimeCalculationServices.IsWithinNext30Minutes(dateTime, validationMinutes);
+        var result = TimeCalculationService.IsDateTimeInRange(dateTime, validationMinutes);
 
         // Assert
         Assert.IsFalse(result);
