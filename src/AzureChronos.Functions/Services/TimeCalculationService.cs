@@ -1,10 +1,9 @@
 using System;
-using Cronos;
 using NCrontab;
 
 namespace AzureChronos.Functions.Services;
 
-public class TimeCalculationServices
+public static class TimeCalculationService
 {
     /// <summary>
     /// Calculates the next occurrence of a cron expression in UTC time zone.
@@ -32,7 +31,7 @@ public class TimeCalculationServices
     /// <param name="dateTime">The date and time to compare.</param>
     /// <param name="validationMinutes">The number of minutes to validate.</param>
     /// <returns>true if the specified date and time is within the next specified number of minutes from the current UTC date and time; otherwise, false.</returns>
-    public static bool IsWithinNext30Minutes(DateTime? dateTime, int validationMinutes)
+    public static bool CheckDateTimeInRange(DateTime? dateTime, int validationMinutes)
     {
         if (dateTime == null)
         {
