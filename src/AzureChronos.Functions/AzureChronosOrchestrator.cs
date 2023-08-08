@@ -20,7 +20,7 @@ public class AzureChronosOrchestrator
         [OrchestrationTrigger] IDurableOrchestrationContext context,
         ILogger log)
     {
-        log.LogInformation("Starting AzureChronos_Orchestrator");
+        log.LogInformation("Starting AzureChronosOrchestrator");
         // var vmList = await _azureComputeService.ListAzureVirtualMachines("");
     }
 }
