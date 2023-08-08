@@ -7,7 +7,7 @@ using Microsoft.Extensions.Logging;
 
 namespace AzureChronos.Functions;
 
-public static class AzureChronos_TimerTrigger
+public static class AzureChronosTimerTrigger
 {
     [FunctionName("AzureChronos_TimerTrigger")]
     public static async Task RunTimerTrigger(

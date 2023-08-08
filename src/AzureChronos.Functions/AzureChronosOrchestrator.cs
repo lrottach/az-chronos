@@ -6,11 +6,11 @@ using Microsoft.Extensions.Logging;
 
 namespace AzureChronos.Functions;
 
-public class AzureChronos_Orchestrator
+public class AzureChronosOrchestrator
 {
     private readonly IAzureComputeService _azureComputeService;
 
-    public AzureChronos_Orchestrator(IAzureComputeService azureComputeService)
+    public AzureChronosOrchestrator(IAzureComputeService azureComputeService)
     {
         _azureComputeService = azureComputeService;
     }
