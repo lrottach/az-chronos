@@ -15,12 +15,12 @@ public class AzureChronosOrchestrator
         _azureComputeService = azureComputeService;
     }
     
-    [FunctionName("AzureChronos_Orchestrator")]
+    [FunctionName("AzureChronosOrchestrator")]
     public async Task RunOrchestrator(
         [OrchestrationTrigger] IDurableOrchestrationContext context,
         ILogger log)
     {
         log.LogInformation("Starting AzureChronos_Orchestrator");
-        var vmList = await _azureComputeService.ListAzureVirtualMachines("");
+        // var vmList = await _azureComputeService.ListAzureVirtualMachines("");
     }
 }
