@@ -10,6 +10,7 @@
         <PackageReference Include="Azure.ResourceManager.Compute" Version="1.1.0" />
         <PackageReference Include="Azure.ResourceManager.Resources" Version="1.6.0" />
         <PackageReference Include="Cronos" Version="0.7.1" />
+        <PackageReference Include="Microsoft.Azure.Functions.Extensions" Version="1.1.0" />
         <PackageReference Include="Microsoft.Azure.WebJobs.Extensions.DurableTask" Version="2.6.0" />
         <PackageReference Include="Microsoft.NET.Sdk.Functions" Version="4.1.1" />
         <PackageReference Include="NCrontab.Signed" Version="3.3.2" />
