@@ -9,11 +9,24 @@ using AzureChronos.Functions.Interfaces;
 
 namespace AzureChronos.Functions.Services;
 
+/// <summary>
+/// Class <c>AzureComputeService</c> provides Azure related compute operations.
+/// It implements the <c>IAzureComputeService</c> interface.
+/// </summary>
 public class AzureComputeService : IAzureComputeService
 {
+    /// <summary>
+    /// Property <c>AzureCredential</c> takes care of providing credentials for Azure SDK usage. 
+    /// It uses DefaultAzureCredential mechanism.
+    /// </summary>
     public DefaultAzureCredential AzureCredential { get; } = new();
 
-    // Function to get all Azure VMs in a subscription using Azure SDK for .NET
+    /// <summary>
+    /// Asynchronous method <c>ListAzureVirtualMachines</c> retrieves and returns all the virtual machines under the provided Azure subscription.
+    /// This makes use of Azure ARM client provided by the Azure SDK for .NET Core applications.
+    /// </summary>
+    /// <param name="subscriptionId">Azure subscription id used to fetch virtual machines.</param>
+    /// <returns>A list of Azure virtual machine resources.</returns>
     public async Task<List<VirtualMachineResource>> ListAzureVirtualMachines(string subscriptionId)
     {
         var client = new ArmClient(AzureCredential);
