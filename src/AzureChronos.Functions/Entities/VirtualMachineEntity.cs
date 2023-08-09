@@ -41,7 +41,13 @@ public class VirtualMachineEntity : IVirtualMachineEntity
         
         return Task.CompletedTask;
     }
-    
+
+    // Method to validate if a virtual machine is eligible to be scheduled
+    public Task<bool> ValidateVirtualMachineEligibilityAsync()
+    {
+        throw new System.NotImplementedException();
+    }
+
     [FunctionName(nameof(VirtualMachineEntity))]
     public static Task Run([EntityTrigger] IDurableEntityContext ctx, ILogger log)
         => ctx.DispatchAsync<VirtualMachineEntity>(log);
