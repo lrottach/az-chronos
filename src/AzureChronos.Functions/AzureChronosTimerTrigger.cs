@@ -29,7 +29,7 @@ public class AzureChronosTimerTrigger
         log.LogInformation($"[TimerTrigger] C# Timer trigger function executed at: {DateTime.Now}");
         
         // Query a list of all virtual machines in the subscription
-        var virtualMachines = await _azureComputeService.ListAzureVirtualMachines(subscriptionId);
+        var virtualMachines = await _azureComputeService.ListAzureVirtualMachinesAsync(subscriptionId);
         
         log.LogInformation("[TimerTrigger] Found {vmCount} virtual machines in subscription {subscriptionId}", virtualMachines.Count, subscriptionId);
 

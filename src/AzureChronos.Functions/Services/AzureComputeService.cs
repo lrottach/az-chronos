@@ -28,7 +28,7 @@ public class AzureComputeService : IAzureComputeService
     /// </summary>
     /// <param name="subscriptionId">Azure subscription id used to fetch virtual machines.</param>
     /// <returns>A list of Azure virtual machine resources.</returns>
-    public async Task<List<VirtualMachineResource>> ListAzureVirtualMachines(string subscriptionId)
+    public async Task<List<VirtualMachineResource>> ListAzureVirtualMachinesAsync(string subscriptionId)
     {
         var client = new ArmClient(AzureCredential);
 
