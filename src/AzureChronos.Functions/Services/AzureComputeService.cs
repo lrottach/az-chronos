@@ -7,7 +7,6 @@ using Azure.ResourceManager.Compute;
 using Azure.ResourceManager.Compute.Models;
 using Azure.ResourceManager.Resources;
 using AzureChronos.Functions.Interfaces;
-using Microsoft.Extensions.Logging;
 
 namespace AzureChronos.Functions.Services;
 
@@ -21,7 +20,7 @@ public class AzureComputeService : IAzureComputeService
     /// Property <c>AzureCredential</c> takes care of providing credentials for Azure SDK usage. 
     /// It uses DefaultAzureCredential mechanism.
     /// </summary>
-    public DefaultAzureCredential AzureCredential { get; } = new();
+    private DefaultAzureCredential AzureCredential { get; } = new();
     
     /// <summary>
     /// Asynchronous method <c>ListAzureVirtualMachines</c> retrieves and returns all the virtual machines under the provided Azure subscription.

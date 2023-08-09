@@ -4,7 +4,7 @@ using Azure.ResourceManager.Compute;
 
 namespace AzureChronos.Functions.Interfaces;
 
-public interface IAzureComputeService : IAzureService
+public interface IAzureComputeService
 {
     Task<List<VirtualMachineResource>> ListAzureVirtualMachinesAsync(string subscriptionId);
     Task<VirtualMachineResource> GetAzureVirtualMachineAsync(string subscriptionId, string resourceGroupName, string vmName);
