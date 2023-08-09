@@ -6,6 +6,7 @@ using Azure.ResourceManager;
 using Azure.ResourceManager.Compute;
 using Azure.ResourceManager.Resources;
 using AzureChronos.Functions.Interfaces;
+using Microsoft.Extensions.Logging;
 
 namespace AzureChronos.Functions.Services;
 
@@ -20,7 +21,7 @@ public class AzureComputeService : IAzureComputeService
     /// It uses DefaultAzureCredential mechanism.
     /// </summary>
     public DefaultAzureCredential AzureCredential { get; } = new();
-
+    
     /// <summary>
     /// Asynchronous method <c>ListAzureVirtualMachines</c> retrieves and returns all the virtual machines under the provided Azure subscription.
     /// This makes use of Azure ARM client provided by the Azure SDK for .NET Core applications.
@@ -39,7 +40,6 @@ public class AzureComputeService : IAzureComputeService
         await foreach(var vm in subResource.GetVirtualMachinesAsync())
         {
             virtualMachines.Add(vm);
-            Console.WriteLine($"Found Azure Virtual Machine: {vm.Data.Name}");
         }
 
         return virtualMachines;
