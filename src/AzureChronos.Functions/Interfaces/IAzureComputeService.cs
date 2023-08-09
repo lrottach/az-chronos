@@ -6,5 +6,6 @@ namespace AzureChronos.Functions.Interfaces;
 
 public interface IAzureComputeService : IAzureService
 {
-    Task<List<VirtualMachineResource>> ListAzureVirtualMachines(string subscriptionId);
+    Task<List<VirtualMachineResource>> ListAzureVirtualMachinesAsync(string subscriptionId);
+    Task<VirtualMachineResource> GetAzureVirtualMachineAsync(string subscriptionId, string resourceGroupName, string vmName);
 }

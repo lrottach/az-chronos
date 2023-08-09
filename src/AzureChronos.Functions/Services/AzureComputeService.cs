@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Azure.Identity;
 using Azure.ResourceManager;
 using Azure.ResourceManager.Compute;
+using Azure.ResourceManager.Compute.Models;
 using Azure.ResourceManager.Resources;
 using AzureChronos.Functions.Interfaces;
 using Microsoft.Extensions.Logging;
@@ -43,5 +44,17 @@ public class AzureComputeService : IAzureComputeService
         }
 
         return virtualMachines;
+    }
+
+    public async Task<VirtualMachineResource> GetAzureVirtualMachineAsync(string subscriptionId, string resourceGroupName, string vmName)
+    {
+        var client = new ArmClient(AzureCredential);
+        
+        var resourceId = VirtualMachineResource.CreateResourceIdentifier(subscriptionId, resourceGroupName, vmName);
+        var virtualMachine = client.GetVirtualMachineResource(resourceId);
+        
+        // Invoke the GetAsync() method to retrieve the virtual machine resource
+        var expand = InstanceViewType.UserData;
+        return await virtualMachine.GetAsync(expand: expand);
     }
 }
