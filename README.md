@@ -9,7 +9,8 @@ Implementing Azure Chronos reduces operational costs and optimises resource util
 ## Tags
 | Azure Tag   |      Examples      |  Description |
 |----------|-------------|:------|
-| AzChronos_Schedule | `0 2 * * 4` | This tag contains the CRON expression that defines the virtual machine's scheduled lifecycle, providing flexibility and precise control over VM operations. |
+| AzChronos_Startup | `0 2 * * 4` | This tag contains the CRON expression that defines the virtual machine's scheduled lifecycle, providing flexibility and precise control over VM operations. |
+| AzChronos_Deallocate | `0 2 * * 4` | This tag contains the CRON expression that defines the virtual machine's deallocate event, providing flexibility and precise control over VM operations. |
 | AzChronos_Downtime | `1`, `3` | This tag captures the desired downtime for the virtual machine in hours, enabling fine-grained control over downtime and improving cost efficiency by minimising unnecessary uptime. |
 | AzChronos_Timezone |    `Central European Time`, `Pacific Standard Time`   |   This tag is used to determine the specific time zone in which the CRON schedule operates, ensuring accuracy and consistency across different geographical locations. |
 | AzChronos_Exclusion | `true` |    This tag provides the functionality to exclude a specific VM from the scheduling process, a handy feature that eliminates the need to remove all tags if a VM is to be excluded from the default schedule. |
