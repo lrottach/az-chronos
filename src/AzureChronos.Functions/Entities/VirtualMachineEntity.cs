@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using AzureChronos.Functions.Common;
 using AzureChronos.Functions.Interfaces;
 using AzureChronos.Functions.Models;
 using Microsoft.Azure.WebJobs;
@@ -43,9 +44,11 @@ public class VirtualMachineEntity : IVirtualMachineEntity
     }
 
     // Method to validate if a virtual machine is eligible to be scheduled
-    public Task<bool> ValidateVirtualMachineEligibilityAsync()
+    public async Task<bool> ValidateVirtualMachineEligibilityAsync()
     {
-        throw new System.NotImplementedException();
+        // Query the Azure API to get the virtual machine resource
+        var virtualMachine = await _azureComputeService.GetAzureVirtualMachineAsync(SubscriptionId, ResourceGroupName, VirtualMachineName);
+        return TagHandler.ValidateVirtualMachineTag(virtualMachine, "AzChronos_Startup");
     }
 
     [FunctionName(nameof(VirtualMachineEntity))]
