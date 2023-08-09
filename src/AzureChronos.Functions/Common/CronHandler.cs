@@ -1,9 +1,9 @@
 using System;
 using NCrontab;
 
-namespace AzureChronos.Functions.Services;
+namespace AzureChronos.Functions.Common;
 
-public static class TimeCalculationService
+public static class CronHandler
 {
     /// <summary>
     /// Calculates the next occurrence of a cron expression in UTC time zone.
@@ -22,7 +22,6 @@ public static class TimeCalculationService
         {
             return null; 
         }
-        
     }
     
     /// <summary>
