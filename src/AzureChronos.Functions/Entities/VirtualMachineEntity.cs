@@ -33,14 +33,20 @@ public class VirtualMachineEntity : IVirtualMachineEntity
         _azureComputeService = azureComputeService;
     }
     
-    public Task InitializeEntityAsync(EntityInitializePayload payload)
+    public async Task InitializeEntityAsync(EntityInitializePayload payload)
     {
+        // Initialize the entity properties
+        // Set scheduled to false by default
         SubscriptionId = payload.SubscriptionId;
         ResourceGroupName = payload.ResourceGroupName;
         VirtualMachineName = payload.VirtualMachineName;
         Scheduled = false;
-        
-        return Task.CompletedTask;
+
+        if (!await ValidateVirtualMachineEligibilityAsync())
+        {
+            _log.LogInformation($"Virtual machine {VirtualMachineName} is not eligible to be scheduled.");
+            DeleteEntity();
+        }
     }
 
     // Method to validate if a virtual machine is eligible to be scheduled
@@ -49,6 +55,11 @@ public class VirtualMachineEntity : IVirtualMachineEntity
         // Query the Azure API to get the virtual machine resource
         var virtualMachine = await _azureComputeService.GetAzureVirtualMachineAsync(SubscriptionId, ResourceGroupName, VirtualMachineName);
         return TagHandler.ValidateVirtualMachineTag(virtualMachine, "AzChronos_Startup");
+    }
+
+    public void DeleteEntity()
+    {
+        Entity.Current.DeleteState();
     }
 
     [FunctionName(nameof(VirtualMachineEntity))]

@@ -7,4 +7,5 @@ public interface IVirtualMachineEntity
 {
     public Task InitializeEntityAsync(EntityInitializePayload payload);
     public Task<bool> ValidateVirtualMachineEligibilityAsync();
+    public void DeleteEntity();
 }
