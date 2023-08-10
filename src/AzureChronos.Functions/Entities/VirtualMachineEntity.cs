@@ -45,6 +45,8 @@ public class VirtualMachineEntity : IVirtualMachineEntity
         if (!await ValidateVirtualMachineEligibilityAsync())
         {
             _log.LogInformation($"Virtual machine {VirtualMachineName} is not eligible to be scheduled.");
+            
+            // Delete the entity if the virtual machine is not eligible to be scheduled
             DeleteEntity();
         }
     }
