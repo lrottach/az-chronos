@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Azure;
 using Azure.Identity;
 using Azure.ResourceManager;
 using Azure.ResourceManager.Compute;
@@ -55,5 +56,15 @@ public class AzureComputeService : IAzureComputeService
         // Invoke the GetAsync() method to retrieve the virtual machine resource
         var expand = InstanceViewType.UserData;
         return await virtualMachine.GetAsync(expand: expand);
+    }
+
+    public async Task DeallocateAzureVirtualMachineAsync(string subscriptionId, string resourceGroupName, string vmName)
+    {
+        var client = new ArmClient(AzureCredential);
+        var resourceId = VirtualMachineResource.CreateResourceIdentifier(subscriptionId, resourceGroupName, vmName);
+        var virtualMachine = client.GetVirtualMachineResource(resourceId);
+        
+        // Invoke the DeallocateAsync() method to deallocate the virtual machine
+        await virtualMachine.DeallocateAsync(WaitUntil.Completed);
     }
 }
