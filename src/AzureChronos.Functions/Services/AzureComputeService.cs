@@ -67,4 +67,14 @@ public class AzureComputeService : IAzureComputeService
         // Invoke the DeallocateAsync() method to deallocate the virtual machine
         await virtualMachine.DeallocateAsync(WaitUntil.Completed);
     }
+
+    public async Task StartAzureVirtualMachineAsync(string subscriptionId, string resourceGroupName, string vmName)
+    {
+        var client = new ArmClient(AzureCredential);
+        var resourceId = VirtualMachineResource.CreateResourceIdentifier(subscriptionId, resourceGroupName, vmName);
+        var virtualMachine = client.GetVirtualMachineResource(resourceId);
+        
+        // Invoke the StartAsync() method to start the virtual machine
+        await virtualMachine.PowerOnAsync(WaitUntil.Completed);
+    }
 }
