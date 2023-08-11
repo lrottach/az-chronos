@@ -53,16 +53,6 @@ public class AzureComputeService : IAzureComputeService
     /// <param name="resourceGroupName">A string parameter that specifies the resource group's name in Azure.</param>
     /// <param name="vmName">A string parameter that specifies the name of the virtual machine in Azure.</param>
     /// <returns>Returns a Task resulting in the VirtualMachineResource object representing the Azure Virtual Machine resource.</returns>
-    /// <remark>
-    /// This method uses Microsoft.Azure.Management.Fluent to interact with Azure. 
-    /// It first creates the ArmClient, which is then used to get the VirtualMachineResource using the provided subscriptionId, resourceGroupName, and vmName.
-    /// It then retrieves the Virtual Machine resource by invoking the GetAsync() method.
-    /// </remark>
-    /// <example>
-    /// <code>
-    /// VirtualMachineResource vmResource = await GetAzureVirtualMachineAsync(subscriptionId, resourceGroup, vmName);
-    /// </code>
-    /// </example>
     public async Task<VirtualMachineResource> GetAzureVirtualMachineAsync(string subscriptionId, string resourceGroupName, string vmName)
     {
         var client = new ArmClient(AzureCredential);
