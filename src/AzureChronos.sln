@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# 
+#
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AzureChronos.Functions", "AzureChronos.Functions\AzureChronos.Functions.csproj", "{D3E5FBE9-672A-44AB-AB5A-AD3E5941E8F2}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AzureChronos.Tests", "AzureChronos.Tests\AzureChronos.Tests.csproj", "{9BA29E1C-FA5B-4AD6-BF8B-C955C10E34FB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AzureChronos.Isolated", "AzureChronos.Isolated\AzureChronos.Isolated.csproj", "{5E046287-5081-410A-A0CF-5810A530914A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,5 +21,9 @@ Global
 		{9BA29E1C-FA5B-4AD6-BF8B-C955C10E34FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9BA29E1C-FA5B-4AD6-BF8B-C955C10E34FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9BA29E1C-FA5B-4AD6-BF8B-C955C10E34FB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5E046287-5081-410A-A0CF-5810A530914A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5E046287-5081-410A-A0CF-5810A530914A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5E046287-5081-410A-A0CF-5810A530914A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5E046287-5081-410A-A0CF-5810A530914A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
