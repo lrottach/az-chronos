@@ -7,6 +7,10 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
     <ItemGroup>
+        <PackageReference Include="Azure.Identity" Version="1.10.0" />
+        <PackageReference Include="Azure.ResourceManager" Version="1.7.0" />
+        <PackageReference Include="Azure.ResourceManager.Compute" Version="1.1.0" />
+        <PackageReference Include="Azure.ResourceManager.Resources" Version="1.6.0" />
         <PackageReference Include="Contrib.Grpc.Core.M1" Version="2.41.0" />
         <PackageReference Include="Microsoft.Azure.Functions.Worker" Version="1.19.0" />
         <PackageReference Include="Microsoft.Azure.Functions.Worker.Extensions.DurableTask" Version="1.0.2" />
