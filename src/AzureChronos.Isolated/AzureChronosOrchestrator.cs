@@ -1,3 +1,4 @@
+using Azure.ResourceManager.Compute;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.DurableTask;
 using Microsoft.Extensions.Logging;
@@ -17,7 +18,11 @@ public class AzureChronosOrchestrator
     public async Task StartAzureChronosOrchestration(
         [OrchestrationTrigger] TaskOrchestrationContext context)
     {
-        _logger.LogInformation($"[OrchestrationTrigger] Starting Azure Chronos Orchestration");     
-        await context.CallActivityAsync(nameof(AzureChronosActivities.ListAzureVirtualMachinesAsync), "1234567890");
+        // Gather required environment variables
+        var subscriptionId = Environment.GetEnvironmentVariable("AZ_SUBSCRIPTION_ID");
+        
+        _logger.LogInformation($"[OrchestrationTrigger] Starting Azure Chronos Orchestration");
+        var vms = await context.CallActivityAsync<List<VirtualMachineResource>>(
+            nameof(AzureChronosActivities.ListAzureVirtualMachinesAsync), subscriptionId);
     }
 }
