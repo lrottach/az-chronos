@@ -1,13 +1,23 @@
+using Microsoft.Azure.Functions.Worker;
 using Microsoft.DurableTask;
+using Microsoft.Extensions.Logging;
 
 namespace AzureChronos.Isolated;
 
-[DurableTask(nameof(AzureChronosOrchestrator))]
-public class AzureChronosOrchestrator : TaskOrchestrator<string?, string>
+public class AzureChronosOrchestrator
 {
-    public override Task<string> RunAsync(TaskOrchestrationContext context, string? input)
+    private readonly ILogger _logger;
+
+    public AzureChronosOrchestrator(ILoggerFactory loggerFactory)
     {
-        Console.WriteLine($"Input: {input}");
-        return Task.FromResult("");
+        _logger = loggerFactory.CreateLogger<AzureChronosOrchestrator>();
+    }
+    
+    [Function(nameof(StartAzureChronosOrchestration))]
+    public async Task StartAzureChronosOrchestration(
+        [OrchestrationTrigger] TaskOrchestrationContext context)
+    {
+        _logger.LogInformation($"[OrchestrationTrigger] Starting Azure Chronos Orchestration");     
+        await context.CallActivityAsync(nameof(AzureChronosActivities.ListAzureVirtualMachinesAsync), "1234567890");
     }
 }
