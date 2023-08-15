@@ -15,7 +15,7 @@ public class AzureChronosTimerTrigger
     
     [Function(nameof(StartAzureChronos))]
     public void StartAzureChronos(
-        [TimerTrigger("0 */1 * * * *")] TimerInfo timerInfo,
+        [TimerTrigger("0 */30 * * * *")] TimerInfo timerInfo,
         [DurableClient] DurableTaskClient client,
         FunctionContext context)
     {
