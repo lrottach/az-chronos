@@ -13,7 +13,7 @@ public class AzureChronosActivities
     }
     
     [Function(nameof(ListAzureVirtualMachinesAsync))]
-    public async Task ListAzureVirtualMachinesAsync([ActivityTrigger] FunctionContext context, string subscriptionId)
+    public async Task ListAzureVirtualMachinesAsync([ActivityTrigger] string subscriptionId, FunctionContext context)
     {
         _logger.LogInformation($"[Activity] Query Azure Virtual Machines for subscription {subscriptionId}", subscriptionId);
     }
