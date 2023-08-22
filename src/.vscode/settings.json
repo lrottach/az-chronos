@@ -1,8 +1,9 @@
 {
-    "azureFunctions.deploySubpath": "AzureChronos.Functions/bin/Release/net6.0/publish",
+    "azureFunctions.deploySubpath": "AzureChronos.Functions/bin/Release/net7.0/publish",
     "azureFunctions.projectLanguage": "C#",
     "azureFunctions.projectRuntime": "~4",
     "debug.internalConsoleOptions": "neverOpen",
     "azureFunctions.preDeployTask": "publish (functions)",
-    "dotnet.defaultSolution": "AzureChronos.sln"
+    "dotnet.defaultSolution": "AzureChronos.sln",
+    "azureFunctions.projectSubpath": "AzureChronos.Isolated"
 }
