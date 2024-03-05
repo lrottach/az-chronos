@@ -8,4 +8,14 @@ public static class TagHandler
     {
         return vm.Data.Tags.ContainsKey(tagName);
     }
+    
+    public static bool IsVmExcludedForScheduling(VirtualMachineResource vm, string exclusionTagName)
+    {
+        return vm.Data.Tags.ContainsKey(exclusionTagName);
+    }
+    
+    public static bool IsVmValidForScheduling(VirtualMachineResource vm, string tagName)
+    {
+        return vm.Data.Tags.ContainsKey(tagName);
+    }
 }
