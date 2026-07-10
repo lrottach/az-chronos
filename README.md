@@ -1,29 +1,8 @@
-# Azure Chronos
+# Chronos for Azure
 
-Azure Chronos is a robust solution that leverages Azure Durable Functions, C#, and .NET 6.0 to facilitate automated lifecycle management of Azure virtual machines based on user-defined CRON schedules through Azure Tags. This sophisticated yet easy-to-use tool reduces the need for manual intervention in recurring VM management tasks.  
-Applying tags to a virtual machine provides a simple, code-free approach to scheduling, eliminating the need for complex tool configurations or coding, and making VM management much more efficient and accessible.
+Chronos for Azure is a lightweight Azure Functions engine that starts and stops Azure Virtual Machines based on CRON schedules supplied via Azure Resource Tags. Tag a VM with a start and/or stop expression and Chronos does the rest — it discovers the tags, schedules the corresponding lifecycle events, and executes them. No per-VM configuration, no code changes: zero-friction, tag-driven cost optimization.
 
-### Benefits
-Implementing Azure Chronos reduces operational costs and optimises resource utilisation by strategically releasing Azure virtual machines during off-peak periods. It provides granular control over system uptime and ensures that virtual machines are only running when they are needed, resulting in significant cost savings, improved performance, and elimination of unnecessary resource consumption.
-
-## Tags
-| Azure Tag   |      Examples      |  Description |
-|----------|-------------|:------|
-| AzChronos_Startup | `0 2 * * 4` | This tag contains the CRON expression that defines the virtual machine's scheduled lifecycle, providing flexibility and precise control over VM operations. |
-| AzChronos_Deallocate | `0 2 * * 4` | This tag contains the CRON expression that defines the virtual machine's deallocate event, providing flexibility and precise control over VM operations. |
-| AzChronos_Downtime | `1`, `3` | This tag captures the desired downtime for the virtual machine in hours, enabling fine-grained control over downtime and improving cost efficiency by minimising unnecessary uptime. |
-| AzChronos_Timezone |    `Central European Time`, `Pacific Standard Time`   |   This tag is used to determine the specific time zone in which the CRON schedule operates, ensuring accuracy and consistency across different geographical locations. |
-| AzChronos_Exclusion | `true` |    This tag provides the functionality to exclude a specific VM from the scheduling process, a handy feature that eliminates the need to remove all tags if a VM is to be excluded from the default schedule. |
-
-## Components
-Work in progress.
-
-## Getting started
-Work in progress.
-
----
-
-> **Note**: The sections below describe the **target architecture** for the in-progress rewrite of Chronos. The legacy content above will be replaced once the new implementation lands.
+> **Note**: Chronos is undergoing a full rewrite on .NET 10 (Azure Functions isolated worker, Durable Functions). The chapter below describes the target architecture; implementation lands feature by feature. The concrete Chronos tag names are not yet finalized and will be documented here once they are.
 
 ## Architecture
 

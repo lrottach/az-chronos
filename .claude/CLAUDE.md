@@ -17,9 +17,9 @@ The repository was originally written on .NET 6 (C# in-process Durable Functions
 - **Discovery**: Azure Resource Graph (single KQL query, multi-subscription-ready)
 - **IaC**: Terraform (AzureRM provider), under `infra/`
 - **Deployment**: Azure Developer CLI (`azd`) headless, orchestrating the Terraform deployment. An `azure.yaml` will be added in a later feature
-- **Source layout**: `src/` for Functions code, `infra/` for Terraform, `deploy/` currently held empty via `.gitkeep` pending the infra decision
+- **Source layout**: `src/` holds all .NET assets — the solution (`src/AzureChronos.slnx`), the SDK pin (`src/global.json`), and the Functions project; `infra/` for Terraform (directory is created when the Terraform feature lands). Same layout as the sibling az-reaper project. Run `dotnet` commands from within `src/` so the SDK pin applies.
 
-None of the above code exists yet. Project initialization establishes conventions and architecture; implementation lands in subsequent features.
+The Functions project under `src/AzureChronos.Functions/` is a minimal timer-trigger scaffold. The Durable Functions components (entities, orchestrator, activities), the discovery logic, and the Terraform infrastructure do not exist yet — they land in subsequent features.
 
 ## Architecture (decided)
 
