@@ -11,28 +11,27 @@ The repository was originally written on .NET 6 (C# in-process Durable Functions
 ## Target stack (authoritative)
 
 - **Runtime**: .NET 10, Azure Functions isolated worker
-- **Hosting**: Flex Consumption plan (Linux) — required for .NET 10 + Durable on Linux, scales to zero
-- **Orchestration**: Azure Durable Functions — **Durable Entity per VM + eternal per-VM orchestrator + activities** (decided; see `README.md` → Architecture)
-- **Durable backend**: Azure Storage (default provider) for v1; Durable Task Scheduler is a future migration if scale demands it
+- **Hosting**: Flex Consumption plan (Linux) — recommended serverless plan for .NET 10, scales to zero
+- **Engine**: single **timer-triggered reconciler** (5-minute tick) — no Durable Functions (decided July 2026; see `README.md` → Architecture → "Why not Durable Functions")
+- **CRON evaluation**: [Cronos](https://github.com/HangfireIO/Cronos) library (CRON parsing, timezones, DST)
+- **State**: one watermark blob (timestamp of last successful run) — no other persisted state
 - **Discovery**: Azure Resource Graph (single KQL query, multi-subscription-ready)
 - **IaC**: Terraform (AzureRM provider), under `infra/`
 - **Deployment**: Azure Developer CLI (`azd`) headless, orchestrating the Terraform deployment. An `azure.yaml` will be added in a later feature
 - **Source layout**: `src/` holds all .NET assets — the solution (`src/AzureChronos.slnx`), the SDK pin (`src/global.json`), and the Functions project; `infra/` for Terraform (directory is created when the Terraform feature lands). Same layout as the sibling az-reaper project. Run `dotnet` commands from within `src/` so the SDK pin applies.
 
-The Functions project under `src/AzureChronos.Functions/` is a minimal timer-trigger scaffold. The Durable Functions components (entities, orchestrator, activities), the discovery logic, and the Terraform infrastructure do not exist yet — they land in subsequent features.
+The Functions project under `src/AzureChronos.Functions/` is a minimal timer-trigger scaffold. The reconciler pipeline (discovery, schedule evaluation, executors), the watermark persistence, and the Terraform infrastructure do not exist yet — they land in subsequent features.
 
 ## Architecture (decided)
 
-Four components — full description, diagram, and rationale live in [`README.md`](../README.md) (`## Architecture`). Summary:
+One reconciler — full description, diagram, and rationale live in [`README.md`](../README.md) (`## Architecture`). Summary:
 
-- **`DiscoveryTimer`** (5-min Timer trigger) — ARG query for tagged VMs → signals each `VmScheduleEntity` with the materialized schedule, or `Clear()` for vanished tags. Spawns the orchestrator for actionable entities that don't yet have one.
-- **`VmScheduleEntity`** — Durable Entity keyed by ARM resource ID. Holds start CRON, stop CRON, timezone, exclusion flag, last action. Source of truth for per-VM intent.
-- **`VmScheduler`** — eternal Durable Orchestrator, one per VM. Reads entity, arms a durable timer to the next CRON occurrence, races it against the `ScheduleChanged` external event. On timer: calls start/stop activity. On event: recomputes. Always `ContinueAsNew`.
-- **Start / Stop activities** — idempotent wrappers over `Azure.ResourceManager.Compute` via user-assigned managed identity.
+- **`ChronosReconciler`** (5-min Timer trigger, the only trigger) — load watermark → single ARG KQL query for tagged VMs including power state (pause-tagged VMs filtered out in KQL) → per-VM CRON evaluation → idempotent start/deallocate via `Azure.ResourceManager.Compute` (user-assigned managed identity) → advance watermark on success.
+- **Schedule evaluation is a pure function**: `(tags, watermark, now) → actions`, using Cronos for CRON/timezone/DST. Occurrences in `(watermark, now]` fire; if both start and stop occurred, the most recent wins. Keep it side-effect-free and unit-tested.
+- **Edge-triggered semantics**: Chronos acts only on occurrences that fell due since the watermark — it does not enforce a desired power state between occurrences, so manual operations are respected. The watermark only advances on success, so outages catch up.
+- **Tag mutation flow**: none needed — every tick re-reads reality from ARG. Worst-case reaction latency to any tag change is one tick (5 minutes).
 
-**Tag mutation mechanism (every case): discovery signals entity → entity raises `ScheduleChanged` → orchestrator reacts.** Edits update the schedule and re-arm the timer; full removal makes the orchestrator exit cleanly. No special cases.
-
-The standalone Durable Task SDK was evaluated and rejected — see the README section. Do not propose it again without a concrete reason.
+Durable Functions (Durable Entity per VM + eternal per-VM orchestrator) was the previous design; it was evaluated and **rejected in July 2026** on cost (always-ready instance requirement on Flex Consumption breaks scale-to-zero), unusable precision, and maintenance grounds — the full evaluation and revisit criteria live in the README. The standalone Durable Task SDK was rejected for the same reasons plus the mandatory paid backend.
 
 ## Scheduling scenarios the engine must support
 
@@ -41,7 +40,7 @@ The exact tag names are **not yet defined**. Refer to these scenarios by behavio
 1. **Stop-only**: VM has a stop/deallocate schedule but no start schedule → Chronos stops it on schedule and never starts it.
 2. **Start-only**: VM has a start schedule but no stop schedule → Chronos starts it on schedule.
 3. **Start + stop**: VM has both schedules → Chronos runs both.
-4. **Exclusion**: VM has an exclusion tag → Chronos ignores the VM entirely, even if start/stop tags are present. Users must not be forced to remove schedule tags to opt out.
+4. **Pause**: VM has a pause tag → Chronos ignores the VM entirely, even if start/stop tags are present. Users must not be forced to remove and reapply schedule tags to suspend the schedule; removing the pause tag resumes it.
 5. **Timezone override**: VM has a timezone tag → Chronos parses it and interprets the CRON expressions in that timezone. Invalid/unparseable timezones must be handled gracefully.
 
 Do **not** invent concrete tag names. When implementing a feature that needs them, ask the user first.
@@ -73,7 +72,7 @@ Do **not** add Claude attribution, co-author trailers, or "Generated with Claude
 
 ## Working-style notes for Claude
 
-- **Use current Microsoft documentation.** Patterns for Azure Functions have shifted substantially since .NET 6 (isolated worker model, new Durable Functions APIs, DI conventions). Do not replicate legacy in-process patterns. When in doubt, fetch current Microsoft Learn docs for Azure Functions, Durable Functions, .NET 10, and the Terraform AzureRM provider.
-- **Architecture is fixed; do not relitigate.** The decisions in "Target stack" and "Architecture (decided)" — Durable Entities + eternal per-VM orchestrator on Flex Consumption with Azure Storage backend — were made deliberately and are documented in `README.md`. Do not propose alternatives (pure Timer trigger, ad-hoc orchestrations per event, standalone Durable Task SDK, external state store) without a concrete new reason.
+- **Use current Microsoft documentation.** Patterns for Azure Functions have shifted substantially since .NET 6 (isolated worker model, DI conventions). Do not replicate legacy in-process patterns. When in doubt, fetch current Microsoft Learn docs for Azure Functions, .NET 10, and the Terraform AzureRM provider.
+- **Architecture is fixed; do not relitigate.** The decisions in "Target stack" and "Architecture (decided)" — a single timer-triggered reconciler on Flex Consumption, edge-triggered, watermark blob as the only state — were re-evaluated deliberately in July 2026 (Durable Functions was the previous design and was rejected; see `README.md` → "Why not Durable Functions" for the rationale and revisit criteria). Do not propose alternatives (Durable Entities/orchestrators, standalone Durable Task SDK, Logic Apps, Azure Automation, external state stores) without a concrete new reason such as sub-minute precision or sequenced-workflow requirements.
 - **Open questions remain — ask before deciding these.** Concrete Chronos tag *names*, the manual-override surface (HTTP API shape), and Event Grid integration timing are all undecided. When implementing a feature that touches these, ask first.
 - **No speculative scaffolding.** Don't generate full Function apps or Terraform modules without an explicit go-ahead for that feature.
