@@ -3,6 +3,15 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
+# Claude Code personal overrides
+.claude/settings.local.json
+
+# Azure Functions local development settings (may contain connection strings)
+local.settings.json
+
+# JetBrains Rider
+.idea/
+
 # User-specific files
 *.rsuser
 *.suo
